@@ -32,4 +32,18 @@ public class nlpPipeline {
 			System.out.println(sentimentName + "\t" + sentimentInt + "\t" + sentence);
 		}
 	}
+	public static String findSentiment(String text) {
+		int sentimentInt = 2;
+		String sentimentName = "NULL";
+		if (text != null && text.length() > 0) {
+			Annotation annotation = pipeline.process(text);
+			CoreMap sentence = annotation
+					.get(CoreAnnotations.SentencesAnnotation.class).get(0);
+			Tree tree = sentence
+					.get(SentimentAnnotatedTree.class);
+			sentimentInt = RNNCoreAnnotations.getPredictedClass(tree);
+			sentimentName = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
+		}
+		return sentimentName;
+	}
 }
